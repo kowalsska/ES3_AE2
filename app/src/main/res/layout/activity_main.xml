@@ -49,8 +49,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play some music using buttons below"
+        android:text="Play some music using buttons above"
         android:id="@+id/myText1"
-        android:layout_marginTop="81dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/playButton"
+        android:layout_alignLeft="@+id/previousButton"
+        android:layout_alignStart="@+id/previousButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="song title"
+        android:id="@+id/songTitleView"
+        android:layout_above="@+id/playButton"
+        android:layout_alignLeft="@+id/pauseButton"
+        android:layout_alignStart="@+id/pauseButton"
+        android:layout_marginBottom="70dp" />
+
 </RelativeLayout>

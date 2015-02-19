@@ -3,15 +3,17 @@ package com.example.magdakowalska.ae2;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import java.io.*;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public void playSong(int songIndex){
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,60 +25,39 @@ public class MainActivity extends ActionBarActivity {
         ImageButton pauseButtonView = (ImageButton) findViewById(R.id.pauseButton);
         ImageButton previousButtonView = (ImageButton) findViewById(R.id.previousButton);
         ImageButton nextButtonView = (ImageButton) findViewById(R.id.nextButton);
-        MediaPlayer myMediaPlayer = new MediaPlayer();
-        FilenameFilter myFilter = new FilenameFilter() {
+        final MediaPlayer player = new MediaPlayer();
+        String path = "/storage/sdcard/raw";
+        File dir = new File(path);
+
+        File[] files = dir.listFiles(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.lastIndexOf('.')>0)
-                {
-                    // get last index for '.' char
-                    int lastIndex = filename.lastIndexOf('.');
-                    // get extension
-                    String str = filename.substring(lastIndex);
-                    // match path name extension
-                    if(str.equals(".mp3"))
+            public boolean accept(File fileDirectory, String filename) {
+                    if(filename.endsWith(".mp3"))
                     {
                         return true;
                     }
-                }
                 return false;
             }
+        });
 
-            public File[] listAvailableMP3s(){
-                File f = new File("/sdcard/media");
-                File[] listFiles = f.listFiles();
-                File[] files = {};
-                int i = 0;
-                for(File file: listFiles){
-                    if(file.isFile()) {
-                        files[i] = file;
-                        i++;
-                    }
-                }
-                return files;
-            }
+        String[] songTitles = new String[files.length];
 
-            public String[] listFileNames(File[] f){
-                f = listAvailableMP3s();
-                String[] songs = {};
-                int i = 0;
-                for(File file:f){
-                    if(accept(file, file.toString())) {
-                        songs[i] = file.toString();
-                        i++;
-                    }
-                }
-                return songs;
+        for(int i = 0; i < files.length; i++){
+            if(files[i].isFile()){
+                songTitles[i] = files[i].getName();
+                System.out.println(songTitles[i]);
             }
-        };
+        }
 
 
 
 
         pauseButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View pauseButtonView) {
                 myTextView.setText("Music paused");
+                player.pause();
+                //isPlaying = !isPlaying;
             }
         });
 
@@ -84,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 myTextView.setText("Music playing");
+                player.start();
             }
         });
 
@@ -91,6 +73,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 myTextView.setText("Previous song");
+                //currentTrackNumber -= 1;
             }
         });
 
@@ -98,12 +81,11 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 myTextView.setText("Next song");
+                //currentTrackNumber += 1;
             }
         });
+
     }
-
-
-
 
 
 
