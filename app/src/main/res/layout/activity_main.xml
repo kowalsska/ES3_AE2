@@ -4,66 +4,148 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-    android:background="#ffff7745">
+    android:background="@drawable/backgroundpaper">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/playButton"
-        android:background="@android:drawable/ic_media_play"
-        android:layout_alignTop="@+id/previousButton"
-        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:id="@+id/topButtons"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/previousButton"
-        android:background="@android:drawable/ic_media_rew"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/playButton"
-        android:layout_toStartOf="@+id/playButton"
-        android:layout_marginRight="69dp"
-        android:layout_marginEnd="69dp"
-        android:layout_marginBottom="47dp" />
+        <ImageButton
+            android:layout_marginRight="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="REPEAT"
+            android:id="@+id/repeatButton"
+            android:background="@drawable/repeat"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nextButton"
-        android:background="@android:drawable/ic_media_ff"
-        android:layout_marginLeft="42dp"
-        android:layout_marginStart="42dp"
-        android:layout_alignTop="@+id/playButton"
-        android:layout_toRightOf="@+id/playButton"
-        android:layout_toEndOf="@+id/playButton" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="PLAYLIST"
+            android:id="@+id/playlistButton"
+            android:background="@drawable/playlist"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:text="SHUFFLE"
+            android:id="@+id/shuffleButton"
+            android:background="@drawable/shuffle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/songThumbnail"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pauseButton"
-        android:background="@android:drawable/ic_media_pause"
-        android:layout_alignTop="@+id/playButton"
-        android:layout_toLeftOf="@+id/playButton"
-        android:layout_toStartOf="@+id/playButton" />
+        android:paddingTop="10dp"
+        android:paddingBottom="1dp"
+        android:gravity="center"
+        android:layout_below="@id/topButtons">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:src="@drawable/noalbumart"
+            android:alpha="0.6" />
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play some music using buttons above"
-        android:id="@+id/myText1"
-        android:layout_below="@+id/playButton"
-        android:layout_alignLeft="@+id/previousButton"
-        android:layout_alignStart="@+id/previousButton" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="song title"
+        android:text="SONG TITLE"
+        android:gravity="center"
         android:id="@+id/songTitleView"
-        android:layout_above="@+id/playButton"
-        android:layout_alignLeft="@+id/pauseButton"
-        android:layout_alignStart="@+id/pauseButton"
-        android:layout_marginBottom="70dp" />
+        android:textAlignment="center"
+        android:fontFamily="Bradley Hand"
+        android:textStyle="bold"
+        android:layout_above="@+id/timerDisplay" />
+
+    <LinearLayout
+        android:id="@+id/timerDisplay"
+        android:layout_above="@+id/bottomButtons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="30dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="00:00"
+            android:textStyle="bold"
+            android:id="@+id/currentDuration" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="66:66"
+            android:textStyle="bold"
+            android:id="@+id/totalDuration" />
+
+    </LinearLayout>
+
+
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:layout_above="@+id/bottomButtons"
+        android:layout_alignLeft="@+id/timerDisplay"
+        android:layout_alignStart="@+id/timerDisplay" />
+
+
+    <LinearLayout
+        android:id="@+id/bottomButtons"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/previousButton"
+            android:background="@drawable/previous" />
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+
+            android:id="@+id/backButton"
+            android:background="@drawable/back"/>
+
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/playButton"
+            android:background="@drawable/play"/>
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/forwardButton"
+            android:background="@drawable/forward"/>
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/nextButton"
+            android:background="@drawable/next"/>
+    </LinearLayout>
 
 </RelativeLayout>

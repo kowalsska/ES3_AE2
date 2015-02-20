@@ -4,5 +4,7 @@
     <string name="app_name">Music Player</string>
     <string name="hello_world">Play some music using buttons below</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_play_list">PlayListActivity</string>
+    <string name="title_activity_single_item_list">SingleItemListActivity</string>
 
 </resources>

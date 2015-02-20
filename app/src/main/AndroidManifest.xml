@@ -16,6 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PlayListActivity"
+            android:label="@string/title_activity_play_list" >
+        </activity>
+
+        <service
+            android:enabled="true"
+            android:name=".MusicService"/>
+
     </application>
 
 </manifest>
