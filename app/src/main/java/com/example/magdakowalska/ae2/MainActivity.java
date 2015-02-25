@@ -1,11 +1,8 @@
 package com.example.magdakowalska.ae2;
 
 import android.media.MediaPlayer;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import java.io.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +10,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
@@ -42,13 +37,14 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
     private Handler mHandler = new Handler();
     private MediaPlayer player;
     private SongsManager manager;
-    private BackendActivity calculations;
+    private CalculationsActivity calculations;
     private int seekForwardTime = 5000; // 5000 milliseconds
     private int seekBackwardTime = 5000; // 5000 milliseconds
     private int currentSongIndex = 0;
     private boolean isShuffle = false;
     private boolean isRepeat = false;
     private boolean isPlaying = false;
+    public Intent serviceIntent;
 
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
@@ -57,7 +53,9 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startService(new Intent(this, MusicService.class));
+        serviceIntent = new Intent(this, MusicService.class);
+
+        startService(serviceIntent);
 
         //Buttons and other fields
 
@@ -78,9 +76,10 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
 
         player = new MediaPlayer();
         manager = new SongsManager();
-        calculations = new BackendActivity();
+        calculations = new CalculationsActivity();
 
         // Listeners
+
         songProgressBar.setOnSeekBarChangeListener(this);
         player.setOnCompletionListener(this);
 
@@ -233,12 +232,14 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
 
     @Override
     protected void onResume() {
-        if(player != null && !player.isPlaying())
+        if(player != null && !isPlaying)
             player.start();
             playButton.setBackgroundResource(R.drawable.pause);
+            startService(serviceIntent);
         super.onResume();
     }
 
+    //What happens when songs gets to its end
     @Override
     public void onCompletion(MediaPlayer player) {
         // check for repeat is ON or OFF
@@ -285,6 +286,7 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
 
             // Updating progress bar
             updateProgressBar();
+
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -298,9 +300,6 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
         mHandler.postDelayed(mUpdateTimeTask, 100);
     }
 
-    /**
-     * Background Runnable thread
-     * */
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
             long totalDuration = player.getDuration();
@@ -321,10 +320,6 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
         }
     };
 
-    /**
-     * Receiving song index from playlist view
-     * and play the song
-     * */
     @Override
     protected void onActivityResult(int requestCode,
                                     int resultCode, Intent data) {
@@ -341,7 +336,6 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        // remove message Handler from updating progress bar
         mHandler.removeCallbacks(mUpdateTimeTask);
     }
 
@@ -351,25 +345,26 @@ public class MainActivity extends Activity implements OnCompletionListener, Seek
         int totalDuration = player.getDuration();
         int currentPosition = calculations.progressToTimer(seekBar.getProgress(), totalDuration);
 
-        // forward or backward to certain seconds
+        // Forward or backward to certain seconds
         player.seekTo(currentPosition);
 
-        // update timer progress again
+        // Update timer progress again
         updateProgressBar();
     }
 
-    public void onClickStartService(View v){
-        startService(new Intent(this, MusicService.class));
-    }
-
-    public void onClickStopService(View v){
-        stopService(new Intent(this, MusicService.class));
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(!isPlaying){
+            super.onDestroy();
+            stopService(serviceIntent);
+        }
     }
 
     @Override
     public void onDestroy(){
-        stopService(new Intent(this, MusicService.class));
-
+        super.onDestroy();
+        stopService(serviceIntent);
     }
 
 }

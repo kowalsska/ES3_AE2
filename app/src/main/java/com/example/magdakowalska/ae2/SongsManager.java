@@ -9,8 +9,13 @@ import java.util.*;
  */
 public class SongsManager {
 
+    public SongsManager(){}
+
+    //CHANGE MEDIA PATH IN ORDER TO RUN THE MUSIC PLAYER ON ANOTHER PHONE
     final String MEDIA_PATH = "/storage/sdcard0/Music/Inne";
+
     File dir = new File(MEDIA_PATH);
+
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
     File[] files = dir.listFiles(new FilenameFilter() {
@@ -23,9 +28,6 @@ public class SongsManager {
             return false;
         }
     });
-
-    //Constructor
-    public SongsManager(){}
 
     public ArrayList<HashMap<String,String>> getPlayList() {
         if(files.length != 0) for (File file : files) {

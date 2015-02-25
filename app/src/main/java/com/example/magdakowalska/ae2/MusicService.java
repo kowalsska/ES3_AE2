@@ -25,10 +25,12 @@ public class MusicService extends Service implements OnCompletionListener, OnPre
     private static final int NOTIFICATION_ID = 0;
     private Notification notification;
     private NotificationManager notificationManager;
+    private boolean isPlaying = false;
 
     @Override
     public void onCreate() {
         startService(new Intent(this, MusicService.class));
+        servicePlayer.reset();
     }
 
     @Override
@@ -46,7 +48,7 @@ public class MusicService extends Service implements OnCompletionListener, OnPre
     public void onDestroy(){
         super.onDestroy();
         if(servicePlayer != null){
-            if(servicePlayer.isPlaying()){
+            if(isPlaying){
                 servicePlayer.stop();
             }
             servicePlayer.release();
@@ -55,13 +57,11 @@ public class MusicService extends Service implements OnCompletionListener, OnPre
     }
 
 
-
     @Override
     public void onCompletion(MediaPlayer mp) {
         stopMedia();
         stopSelf();
     }
-
 
     @Override
     public void onPrepared(MediaPlayer mp) {
@@ -70,29 +70,27 @@ public class MusicService extends Service implements OnCompletionListener, OnPre
 
     @Override
     public void onSeekComplete(MediaPlayer mp) {
-        if (!servicePlayer.isPlaying()){
+        if (!isPlaying){
             playMedia();
-            Toast.makeText(this, "SeekComplete", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public void playMedia(){
-        if(!servicePlayer.isPlaying()){
+        if(!isPlaying){
             Toast.makeText(getApplicationContext(), "Background music player", Toast.LENGTH_SHORT).show();
             servicePlayer.start();
-
         }
     }
 
     public void stopMedia(){
-        if(servicePlayer.isPlaying()){
+        if(isPlaying){
             servicePlayer.stop();
         }
     }
 
     // Create Notification
     private void initNotification() {
+        Toast.makeText(getApplicationContext(), "Background notification ON", Toast.LENGTH_SHORT).show();
         Context context = getApplicationContext();
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
@@ -110,6 +108,6 @@ public class MusicService extends Service implements OnCompletionListener, OnPre
     private void cancelNotification() {
         String ns = Context.NOTIFICATION_SERVICE;
         notificationManager = (NotificationManager) getSystemService(ns);
-        notificationManager.cancel(NOTIFICATION_ID);
+        notificationManager.cancelAll();
     }
 }
